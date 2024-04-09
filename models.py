@@ -20,8 +20,8 @@ class Customer(db.Model):
     name = mapped_column(String(200), nullable=False, unique=True)
     phone = mapped_column(String(20), nullable=False)
     balance = mapped_column(DECIMAL(10, 3), nullable=False, default=0)
-    orders = relationship("Order")
-
+    orders = relationship("Order", cascade="all, delete-orphan")
+    
     def _tojson(self):
         return {
             "id": self.id,

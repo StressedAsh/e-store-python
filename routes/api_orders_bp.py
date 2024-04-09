@@ -40,6 +40,15 @@ def delete_order(id):
     db.session.commit()
     return redirect(url_for("html.orders"))
 
+@api_order_bp.route("/<int:id>", methods=["DELETE"])
+def delete_order_api(id):
+    order = db.get_or_404(Order, id)
+    if order.processed is not None:
+        return "Invalid Request", 405
+    db.session.delete(order)
+    db.session.commit()
+    return "", 204  
+
 @api_order_bp.route("/<int:id>", methods=["PUT", "POST"])
 def process_order(id):
     data = request.form.to_dict()

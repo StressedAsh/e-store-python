@@ -32,6 +32,13 @@ def delete_customer(id):
     db.session.commit()
     return "", 204
 
+@api_customers_bp.route("/<int:id>", methods=["POST"])
+def delete_customer_post(id):
+    customer = db.get_or_404(Customer, id)
+    db.session.delete(customer)
+    db.session.commit()
+    return redirect(url_for("html.customers_info"))
+
 @api_customers_bp.route("/", methods=["POST"])
 def customers_json():
     # ! This method uses the form in my html so not as per the project instructions

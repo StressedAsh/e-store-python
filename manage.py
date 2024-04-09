@@ -15,7 +15,7 @@ def drop_tables():
         db.drop_all()
 
 
-def costumer_table():
+def customer_table():
     with app.app_context():
         with open("./data/customers.csv", "r", newline="") as f:
             data = csv.DictReader(f)
@@ -23,7 +23,6 @@ def costumer_table():
                 customer = Customer(name=i["name"], phone=i["phone"],balance= random.randint(1, 1000))
                 db.session.add(customer)
             db.session.commit()
-
 
 def product_table():
     with app.app_context():
@@ -38,7 +37,7 @@ def product_table():
 if __name__ == "__main__":
     drop_tables()
     create_tables()
-    costumer_table()
+    customer_table()
     product_table()
 # seeding orders and product orders with random data
     with app.app_context():
