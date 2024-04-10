@@ -5,8 +5,6 @@ from models import Customer, Products, Order, ProductOrder
 # Create a Blueprint for the customers API
 api_order_bp = Blueprint("api_orders", __name__)
 
-
-
 @api_order_bp.route("", methods=["POST"])
 def add_order():
     data = request.get_json()
@@ -51,21 +49,52 @@ def delete_order_api(id):
 
 @api_order_bp.route("/<int:id>", methods=["PUT", "POST"])
 def process_order(id):
-    data = request.form.to_dict()
-    print(data)
+    if request.form:
+        data = request.form.to_dict()
+    else:
+        data = request.get_json()
     order = db.get_or_404(Order, id)
+
+    if order.processed is not None:
+        return "Invalid Request", 401
+    if "process" in data:
+        if data["process"] == "True":
+            process = True
+        else:
+            process = False
+            return "Invalid Request", 402
+        
     process = True
+
     if process:
-        if "strategy"  not in data:
-            print("This is going through..........")
+        if "strategy" not in data:
             strategy = "adjust"
         else:
             strategy = data["strategy"]
-            print(strategy)
-        print(strategy)
         if strategy not in ["adjust", "reject", "ignore"]:
-            return "Invalid Request", 400
+            return "Invalid Request", 403
         if  not order.process(strategy):
-            return "Invalid Request", 400
+            return "Invalid Request", 405
         
     return redirect(url_for("html.orders"))
+
+# @api_order_bp.route("/<int:id>", methods=["PUT"])
+# def process_order_api_without_form(id):
+#     data = request.get_json()
+#     order = db.get_or_404(Order, id)
+#     if order.processed is not None:
+#         return "Invalid Request", 405
+#     if data["process"] != True:
+#         return "Invalid Request", 405
+#     process = True
+#     if process:
+#         if "strategy" not in data | data["strategy"] == "":
+#             strategy = "adjust"
+#         else:
+#             strategy = data["strategy"]
+#         if strategy not in ["adjust", "reject", "ignore"]:
+#             return "Invalid Request", 400
+#         if not order.process(strategy):
+#             return "Invalid Request", 400
+        
+#     return "", 204

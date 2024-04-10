@@ -1,13 +1,28 @@
 {% extends "base.html" %} {% block content %}
 <h1>Customer Info</h1>
 <br />
-<div class="d-flex justify-content-around">
-  <p>Name: {{customer.name}}</p>
-  <p>Phone: {{customer.phone}}</p>
-  <p>Balance: {{customer.balance}}</p>
-</div>
-<a href="{{url_for('html.customers_info')}}">Back</a>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Customer ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Balance</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">{{customer.id}}</th>
+      <td>{{customer.name}}</td>
+      <td>{{customer.phone}}</td>
+      <td>{{customer.balance}}</td>
+    </tr>
+  </tbody>
+</table>
+<a class="btn btn-primary" href="{{url_for('html.customers_info')}}">Back</a>
 {% for order in customer.orders %}
 <p>Order: {{order.id}}</p>
-<a href="{{url_for('html.orders_info', id=order.id)}}">Orders</a>
+<a class="btn btn-primary" href="{{url_for('html.orders_info', id=order.id)}}"
+  >Orders</a
+>
 {%endfor%} {% endblock %}

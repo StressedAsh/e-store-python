@@ -1,13 +1,15 @@
 {% extends "base.html" %} {% block content %}
-<h1>Customers</h1>
-<button
-  type="button"
-  class="btn btn-primary"
-  data-bs-toggle="modal"
-  data-bs-target="#exampleModalCenter"
->
-  Add Customer
-</button>
+<h1 class="d-flex justify-content-center">Customers</h1>
+<div class="d-flex justify-content-center">
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#exampleModalCenter"
+  >
+    Add Customer
+  </button>
+</div>
 <!-- Modal -->
 <div
   class="modal fade"
@@ -88,7 +90,7 @@
           method="POST"
           action='{{url_for("api_customers.delete_customer_post", id=customer.id)}}'
         >
-          <button type="submit">Delete</button>
+          <button type="submit" class="btn btn-primary">Delete</button>
         </form>
       </td>
     </tr>

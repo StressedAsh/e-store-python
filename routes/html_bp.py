@@ -8,7 +8,7 @@ htmls_bp = Blueprint("html", __name__)
 @htmls_bp.route("/")
 def home():
     return render_template(
-        "home.html", name="Ashutosh", my_list=["Home", "Customers", "Products", "Orders"]
+        "home.html", name="Ashutosh Dhatwalia"
     )
 
 @htmls_bp.route("/customers")
