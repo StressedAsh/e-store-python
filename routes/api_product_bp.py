@@ -15,14 +15,15 @@ def add_product():
     price = data["price"]
     if "available" in data:
         available = data["available"]
+        if available < 0:
+            return "Negative Available", 400
         if not isinstance(available, int):
             return "Invalid Request", 400
     if not isinstance(name, str) or not isinstance(price, (int, float)):
         return "Invalid Parameters", 400
     if price < 0:
         return "Negative Price", 400
-    if available < 0:
-        return "Negative Available", 400
+
     product = Products(name=name, price=price, available=data["available"] if "available" in data else 0)
     db.session.add(product)
     db.session.commit()
@@ -34,21 +35,18 @@ def update_product(id):
     data = request.get_json()
     prodcut = db.get_or_404(Products, id)
 
-    if "price" not in data:
-        if "name" in data:
-            name = data["name"]
-            if not isinstance(name, str):
-                return "invalid Request", 400
-            prodcut.name = name
-        return "Invalid Request", 400
+    if "name" in data:
+        name = data["name"]
+        if not isinstance(name, str):
+            return "invalid Request", 400
+        prodcut.name = name
     
-    if "name" not in data:
-        if "price" in data:
-            price = data["price"]
-            if not isinstance(price, (int, float)):
-                return "Invalid Request", 400
-            if price <= 0:
-                return "Invalid Request", 400
+    if "price" in data:
+        price = data["price"]
+        if not isinstance(price, (int, float)):
+            return "Invalid Request", 400
+        if price <= 0:
+            return "Invalid Request", 400
         prodcut.price = price
 
     if "available" in data:
@@ -59,8 +57,6 @@ def update_product(id):
             return "Invalid Request", 400
         prodcut.available = available
 
-    if "available" not in data:
-        prodcut.available = 0
     db.session.commit()
     return "", 201
 
